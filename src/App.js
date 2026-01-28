@@ -80,7 +80,7 @@ function App() {
         const conteudo = `
             <html>
                 <head>
-                    <title>Relatório de Portaria - UNIT</title>
+                    <title>Relatório de Portaria - Controle de acesso</title>
                     <style>
                         body { font-family: sans-serif; padding: 20px; }
                         h1 { text-align: center; color: #1e3a8a; margin-bottom: 5px; }
@@ -91,7 +91,7 @@ function App() {
                     </style>
                 </head>
                 <body>
-                    <h1>SISTEMA UNIT - RELATÓRIO DE PORTARIA</h1>
+                    <h1>CONTROLE DE ACESSO - RELATÓRIO DE PORTARIA</h1>
                     <div class="header-info">Gerado em: ${new Date().toLocaleString()}</div>
                     <table>
                         <thead>
@@ -123,7 +123,7 @@ function App() {
         <div className="container">
             <div className="header">
                 <h1>CONTROLE DE ACESSO - PORTARIA MATRIZ</h1>
-                <p>Polo Segurança Especializada</p>
+                <p>Ao finalizar o expediente 'Clicar para Imprimir Relatório' e salvar para controle interno</p>
             </div>
 
             <div className="nav-buttons">

@@ -288,3 +288,151 @@ td {
 .ENCOMENDA {
     background: #10b981;
 }
+
+.lista-scroll {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.item-lista {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.tabs-mini {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.tabs-mini button {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.tabs-mini button.active {
+    background: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+}
+
+.col-gap {
+    display: flex;
+    flexDirection: column;
+    gap: 5px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-icon {
+    background: #64748b;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-icon.delete {
+    background: #ef4444;
+}
+
+.btn-cancel {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 11px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.sentido-toggle {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 10px;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 6px;
+}
+
+.sentido-toggle button {
+    flex: 1;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.sentido-toggle button.off {
+    background: transparent;
+    color: #94a3b8;
+}
+
+.btn-in {
+    background: #16a34a !important;
+    color: white;
+}
+
+.btn-out {
+    background: #dc2626 !important;
+    color: white;
+}
+
+/* Tags coloridas na tabela para Saída */
+.tag.PEDESTRE_SAÍDA,
+.tag.VISITANTE_SAÍDA,
+.tag.VEÍCULO_SAÍDA,
+.tag.VEÍCULO_EXT_SAÍDA {
+    background: #dc2626;
+}
+
+/* Cores das Tags na Tabela */
+.tag.PEDESTRE_ENTRADA,
+.tag.VEÍCULO_ENTRADA,
+.tag.VISITANTE_ENTRADA {
+    background: #3b82f6;
+}
+
+.tag.PEDESTRE_SAÍDA,
+.tag.VEÍCULO_SAÍDA,
+.tag.VISITANTE_SAÍDA,
+.tag.VEÍCULO_EXT_SAÍDA {
+    background: #dc2626;
+}
+
+.tag.VEÍCULO_EXT_ENTRADA {
+    background: #f59e0b;
+}
+
+.tag.ENCOMENDA {
+    background: #10b981;
+}
+
+.col-gap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tag.ENC_ENTRADA { background: #10b981 !important; } /* Verde para chegada */
+.tag.ENC_SAIDA { background: #6366f1 !important; }   /* Roxo/Azul para saída/entrega */
+
+.item-pendente:hover {
+    background: #e2e8f0 !important;
+}

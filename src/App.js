@@ -16,7 +16,7 @@ function App() {
 
     // Estados de interface
     const [modoPedestre, setModoPedestre] = useState('interno');
-    const [modoVeiculo, setModoVeiculo] = useState('visitante');
+    const [modoVeiculo, setModoVeiculo] = useState('interno');
     const [sentidoPedestre, setSentidoPedestre] = useState('ENTRADA');
     const [sentidoVeiculo, setSentidoVeiculo] = useState('ENTRADA');
     const [mostrarEncomenda, setMostrarEncomenda] = useState(false);
@@ -27,7 +27,6 @@ function App() {
     const [condutorVeiculo, setCondutorVeiculo] = useState('');
     const [visNome, setVisNome] = useState('');
     const [visRegistro, setVisRegistro] = useState('');
-    const [visEmpresa, setVisEmpresa] = useState('');
     const [veicModeloVis, setVeicModeloVis] = useState('');
     const [veicPlacaVis, setVeicPlacaVis] = useState('');
     const [remetente, setRemetente] = useState('');
@@ -53,15 +52,17 @@ function App() {
     };
 
     const excluirItem = (id, tipo) => {
-        if (!window.confirm("Deseja realmente excluir este cadastro?")) return;
-        let novaListaF = funcionarios;
-        let novaListaV = veiculosCadastrados;
-        if (tipo === 'F') novaListaF = funcionarios.filter(f => f.id !== id);
-        if (tipo === 'V') novaListaV = veiculosCadastrados.filter(v => v.id !== id);
-        setFuncionarios(novaListaF);
-        setVeiculosCadastrados(novaListaV);
-        sincronizar(novaListaF, novaListaV, historico);
-    };
+    if (!window.confirm("Deseja realmente excluir este cadastro?")) return;
+    let novaListaF = funcionarios;
+    let novaListaV = veiculosCadastrados;
+    
+    if (tipo === 'F') novaListaF = funcionarios.filter(f => f.id !== id);
+    if (tipo === 'V') novaListaV = veiculosCadastrados.filter(v => v.id !== id);
+    
+    setFuncionarios(novaListaF);
+    setVeiculosCadastrados(novaListaV);
+    sincronizar(novaListaF, novaListaV, historico);
+};
 
     const registrarAcesso = (tipo, detalhe) => {
         const registro = { id: Date.now(), tipo, detalhe, data: new Date().toLocaleString() };
@@ -69,9 +70,8 @@ function App() {
         setHistorico(novoHist);
         sincronizar(funcionarios, veiculosCadastrados, novoHist);
         
-        // Limpar campos
         setFuncionarioSelecionado(''); setVeiculoSelecionado(''); setCondutorVeiculo('');
-        setVisNome(''); setVisRegistro(''); setVisEmpresa('');
+        setVisNome(''); setVisRegistro('');
         setVeicModeloVis(''); setVeicPlacaVis(''); setRemetente(''); setDestinatarioEnc('');
     };
 
@@ -80,35 +80,24 @@ function App() {
         const conteudo = `
             <html>
                 <head>
-                    <title>Relatório de Portaria - Controle de acesso</title>
+                    <title>Relatório de Portaria - UNIT</title>
                     <style>
                         body { font-family: sans-serif; padding: 20px; }
-                        h1 { text-align: center; color: #1e3a8a; margin-bottom: 5px; }
+                        h1 { text-align: center; color: #1e3a8a; }
                         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
                         th, td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 12px; }
                         th { background-color: #f0f4f8; }
-                        .header-info { text-align: center; margin-bottom: 20px; font-size: 14px; color: #666; }
                     </style>
                 </head>
                 <body>
-                    <h1>CONTROLE DE ACESSO - RELATÓRIO DE PORTARIA</h1>
-                    <div class="header-info">Gerado em: ${new Date().toLocaleString()}</div>
+                    <h1>SISTEMA UNIT - RELATÓRIO DE PORTARIA</h1>
+                    <div style="text-align:center">Gerado em: ${new Date().toLocaleString()}</div>
                     <table>
                         <thead>
-                            <tr>
-                                <th>Data/Hora</th>
-                                <th>Tipo</th>
-                                <th>Descrição Detalhada</th>
-                            </tr>
+                            <tr><th>Data/Hora</th><th>Tipo</th><th>Descrição</th></tr>
                         </thead>
                         <tbody>
-                            ${historico.map(h => `
-                                <tr>
-                                    <td>${h.data}</td>
-                                    <td>${h.tipo}</td>
-                                    <td>${h.detalhe}</td>
-                                </tr>
-                            `).join('')}
+                            ${historico.map(h => `<tr><td>${h.data}</td><td>${h.tipo}</td><td>${h.detalhe}</td></tr>`).join('')}
                         </tbody>
                     </table>
                 </body>
@@ -122,8 +111,8 @@ function App() {
     return (
         <div className="container">
             <div className="header">
-                <h1>CONTROLE DE ACESSO - PORTARIA MATRIZ</h1>
-                <p>Ao finalizar o expediente 'Clicar para Imprimir Relatório' e salvar para controle interno</p>
+                <h1>SISTEMA UNIT - PORTARIA REGIONAL</h1>
+                <p>Servidor Central: 10.10.64.101</p>
             </div>
 
             <div className="nav-buttons">
@@ -134,7 +123,7 @@ function App() {
             {aba === 'cadastro' ? (
                 <div className="grid-cards">
                     <div className="card">
-                        <h2>Cadastrar Pedestre</h2>
+                        <h2>Cadastrar Funcionário</h2>
                         <form onSubmit={(e) => {
                             e.preventDefault();
                             const nova = { id: Date.now(), nome: e.target.nome.value, departamento: e.target.departamento.value };
@@ -144,8 +133,8 @@ function App() {
                             e.target.reset();
                         }}>
                             <input name="nome" placeholder="Nome Completo" required className="input" style={{ marginBottom: '10px' }} />
-                            <input name="departamento" placeholder="Departamento/Setor" required className="input" style={{ marginBottom: '10px' }} />
-                            <button type="submit" className="btn-success">Adicionar Pedestre</button>
+                            <input name="departamento" placeholder="Departamento" required className="input" style={{ marginBottom: '10px' }} />
+                            <button type="submit" className="btn-success">Salvar Cadastro</button>
                         </form>
                         <div className="lista-scroll" style={{ marginTop: '20px' }}>
                             {funcionarios.map(f => (
@@ -158,7 +147,7 @@ function App() {
                     </div>
 
                     <div className="card">
-                        <h2>Gestão de Frota</h2>
+                        <h2>Veículos da Frota</h2>
                         <form onSubmit={(e) => {
                             e.preventDefault();
                             const novo = { id: Date.now(), placa: e.target.placa.value.toUpperCase(), modelo: e.target.modelo.value };
@@ -169,7 +158,7 @@ function App() {
                         }}>
                             <input name="placa" placeholder="Placa" required className="input" style={{ marginBottom: '10px' }} />
                             <input name="modelo" placeholder="Modelo" required className="input" style={{ marginBottom: '10px' }} />
-                            <button className="btn-success">Adicionar à Frota</button>
+                            <button className="btn-success">Cadastrar Veículo</button>
                         </form>
                         <div className="lista-scroll" style={{ marginTop: '20px' }}>
                             {veiculosCadastrados.map(v => (
@@ -184,6 +173,7 @@ function App() {
             ) : (
                 <>
                     <div className="grid-cards">
+                        {/* CONTROLE DE PEDESTRES */}
                         <div className="card">
                             <div className="tabs-mini">
                                 <button onClick={() => setModoPedestre('interno')} className={modoPedestre === 'interno' ? 'active' : ''}>Interno</button>
@@ -196,24 +186,25 @@ function App() {
                             {modoPedestre === 'interno' ? (
                                 <div className="col-gap">
                                     <select className="input" value={funcionarioSelecionado} onChange={e => setFuncionarioSelecionado(e.target.value)}>
-                                        <option value="">Selecionar Funcionário...</option>
+                                        <option value="">Buscar Funcionário...</option>
                                         {funcionarios.map(f => <option key={f.id} value={f.nome}>{f.nome}</option>)}
                                     </select>
                                     <button className="btn-primary" onClick={() => funcionarioSelecionado && registrarAcesso(`PEDESTRE_${sentidoPedestre}`, `${sentidoPedestre}: ${funcionarioSelecionado}`)}>Confirmar</button>
                                 </div>
                             ) : (
                                 <div className="col-gap">
-                                    <input placeholder="Nome" value={visNome} onChange={e => setVisNome(e.target.value)} />
+                                    <input placeholder="Nome Visitante" value={visNome} onChange={e => setVisNome(e.target.value)} />
                                     <input placeholder="RG/CPF" value={visRegistro} onChange={e => setVisRegistro(e.target.value)} />
-                                    <button className="btn-success" onClick={() => visNome && registrarAcesso(`VISITANTE_${sentidoPedestre}`, `${sentidoPedestre} | ${visNome} | RG: ${visRegistro}`)}>Gravar {sentidoPedestre}</button>
+                                    <button className="btn-success" onClick={() => visNome && registrarAcesso(`VISITANTE_${sentidoPedestre}`, `${sentidoPedestre} | ${visNome} | RG: ${visRegistro}`)}>Gravar</button>
                                 </div>
                             )}
                         </div>
 
+                        {/* CONTROLE DE VEÍCULOS (ATUALIZADO PARA BUSCA DE MOTORISTA) */}
                         <div className="card">
                             <div className="tabs-mini">
                                 <button onClick={() => setModoVeiculo('interno')} className={modoVeiculo === 'interno' ? 'active' : ''}>Frota</button>
-                                <button onClick={() => setModoVeiculo('visitante')} className={modoVeiculo === 'visitante' ? 'active' : ''}>Visitante</button>
+                                <button onClick={() => setModoVeiculo('visitante')} className={modoVeiculo === 'visitante' ? 'active' : ''}>Externo</button>
                             </div>
                             <div className="sentido-toggle">
                                 <button onClick={() => setSentidoVeiculo('ENTRADA')} className={sentidoVeiculo === 'ENTRADA' ? 'btn-in' : 'off'}>ENTRADA</button>
@@ -222,26 +213,31 @@ function App() {
                             {modoVeiculo === 'interno' ? (
                                 <div className="col-gap">
                                     <select className="input" value={veiculoSelecionado} onChange={e => setVeiculoSelecionado(e.target.value)}>
-                                        <option value="">Selecionar Placa...</option>
+                                        <option value="">Selecionar Veículo...</option>
                                         {veiculosCadastrados.map(v => <option key={v.id} value={`${v.placa} (${v.modelo})`}>{v.placa}</option>)}
                                     </select>
-                                    <input placeholder="Motorista" value={condutorVeiculo} onChange={e => setCondutorVeiculo(e.target.value)} />
-                                    <button className="btn-primary" onClick={() => veiculoSelecionado && registrarAcesso(`VEÍCULO_${sentidoVeiculo}`, `${sentidoVeiculo} | Frota: ${veiculoSelecionado} | Condutor: ${condutorVeiculo}`)}>Confirmar</button>
+                                    {/* MUDANÇA AQUI: INPUT SUBSTITUÍDO POR SELECT DE FUNCIONÁRIOS */}
+                                    <select className="input" value={condutorVeiculo} onChange={e => setCondutorVeiculo(e.target.value)}>
+                                        <option value="">Buscar Motorista (Funcionário)...</option>
+                                        {funcionarios.map(f => <option key={f.id} value={f.nome}>{f.nome}</option>)}
+                                    </select>
+                                    <button className="btn-primary" onClick={() => veiculoSelecionado && condutorVeiculo && registrarAcesso(`VEÍCULO_${sentidoVeiculo}`, `${sentidoVeiculo} | Frota: ${veiculoSelecionado} | Motorista: ${condutorVeiculo}`)}>Confirmar</button>
                                 </div>
                             ) : (
                                 <div className="col-gap">
-                                    <input placeholder="Placa" value={veicPlacaVis} onChange={e => setVeicPlacaVis(e.target.value.toUpperCase())} />
+                                    <input placeholder="Placa Veículo" value={veicPlacaVis} onChange={e => setVeicPlacaVis(e.target.value.toUpperCase())} />
                                     <input placeholder="Modelo/Cor" value={veicModeloVis} onChange={e => setVeicModeloVis(e.target.value)} />
-                                    <input placeholder="Motorista" value={condutorVeiculo} onChange={e => setCondutorVeiculo(e.target.value)} />
-                                    <button className="btn-success" onClick={() => veicPlacaVis && registrarAcesso(`VEÍCULO_EXT_${sentidoVeiculo}`, `${sentidoVeiculo} | Placa: ${veicPlacaVis} | Motorista: ${condutorVeiculo}`)}>Gravar {sentidoVeiculo}</button>
+                                    <input placeholder="Motorista Externo" value={condutorVeiculo} onChange={e => setCondutorVeiculo(e.target.value)} />
+                                    <button className="btn-success" onClick={() => veicPlacaVis && registrarAcesso(`VEÍCULO_EXT_${sentidoVeiculo}`, `${sentidoVeiculo} | Placa: ${veicPlacaVis} | Motorista: ${condutorVeiculo}`)}>Gravar</button>
                                 </div>
                             )}
                         </div>
 
+                        {/* ENCOMENDAS */}
                         <div className="card">
                             {!mostrarEncomenda ? (
-                                <button className="btn-access" style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }} onClick={() => { setMostrarEncomenda(true); setModoEnc('LISTA'); }}>
-                                    <Box size={24} /> <span>Encomendas / Retiradas</span>
+                                <button className="btn-access" style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }} onClick={() => { setMostrarEncomenda(true); setModoEnc('LISTA'); }}>
+                                    <Box size={24} /> <span>Encomendas</span>
                                 </button>
                             ) : (
                                 <div className="col-gap">
@@ -251,24 +247,24 @@ function App() {
                                     </div>
                                     {modoEnc === 'NOVO' ? (
                                         <>
-                                            <input placeholder="Remetente" value={remetente} onChange={e => setRemetente(e.target.value)} />
+                                            <input placeholder="Transportadora/Remetente" value={remetente} onChange={e => setRemetente(e.target.value)} />
                                             <select className="input" value={destinatarioEnc} onChange={e => setDestinatarioEnc(e.target.value)}>
-                                                <option value="">Para quem...</option>
+                                                <option value="">Destinatário...</option>
                                                 {funcionarios.map(f => <option key={f.id} value={f.nome}>{f.nome}</option>)}
                                             </select>
-                                            <button className="btn-success" onClick={() => { registrarAcesso('ENC_ENTRADA', `📦 CHEGADA - De: ${remetente} | Para: ${destinatarioEnc}`); setModoEnc('LISTA'); }}>Gravar</button>
+                                            <button className="btn-success" onClick={() => { registrarAcesso('ENC_ENTRADA', `📦 CHEGADA - De: ${remetente} | Para: ${destinatarioEnc}`); setModoEnc('LISTA'); }}>Gravar Entrada</button>
                                         </>
                                     ) : (
                                         <div className="lista-scroll" style={{maxHeight: '120px'}}>
                                             {historico.filter(h => h.tipo === 'ENC_ENTRADA' && !historico.some(s => s.tipo === 'ENC_SAIDA' && s.detalhe.includes(`Ref ID: ${h.id}`))).map(p => (
                                                 <div key={p.id} className="item-pendente" style={{display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '5px', padding: '5px', background: '#f1f5f9'}}>
                                                     <span>{p.detalhe.split('|')[1]}</span>
-                                                    <button onClick={() => registrarAcesso('ENC_SAIDA', `✅ RETIRADA - Ref ID: ${p.id} | Receptor: ${p.detalhe.split('|')[1]}`)} style={{background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer'}}>Baixa</button>
+                                                    <button onClick={() => registrarAcesso('ENC_SAIDA', `✅ RETIRADA - Ref ID: ${p.id} | Receptor: ${p.detalhe.split('|')[1]}`)} style={{background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer'}}>Dar Baixa</button>
                                                 </div>
                                             ))}
                                         </div>
                                     )}
-                                    <button className="btn-cancel" onClick={() => setMostrarEncomenda(false)}>Voltar</button>
+                                    <button className="btn-cancel" onClick={() => setMostrarEncomenda(false)}>Fechar</button>
                                 </div>
                             )}
                         </div>
@@ -276,23 +272,23 @@ function App() {
 
                     <div className="card" style={{ marginTop: '20px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                            <h3>📌 Histórico Centralizado</h3>
+                            <h3>📌 Histórico de Acessos</h3>
                             <div style={{ display: 'flex', gap: '15px' }}>
-                                <Printer size={20} onClick={imprimirRelatorio} style={{ cursor: 'pointer', color: '#3b82f6' }} title="Imprimir Relatório" />
+                                <Printer size={20} onClick={imprimirRelatorio} style={{ cursor: 'pointer', color: '#3b82f6' }} title="Imprimir" />
                                 <Trash2 size={20} onClick={() => { if (window.confirm("Limpar histórico?")) { setHistorico([]); sincronizar(funcionarios, veiculosCadastrados, []) } }} style={{ cursor: 'pointer', color: '#ef4444' }} />
                             </div>
                         </div>
                         <div className="lista-scroll">
-                            <table>
-                                <thead>
-                                    <tr><th>Data/Hora</th><th>Tipo</th><th>Descrição</th></tr>
+                            <table style={{width: '100%', borderCollapse: 'collapse'}}>
+                                <thead style={{background: '#f8fafc'}}>
+                                    <tr><th style={{padding: '10px', textAlign: 'left'}}>Data/Hora</th><th style={{padding: '10px', textAlign: 'left'}}>Tipo</th><th style={{padding: '10px', textAlign: 'left'}}>Descrição</th></tr>
                                 </thead>
                                 <tbody>
                                     {historico.map(h => (
-                                        <tr key={h.id}>
-                                            <td>{h.data}</td>
-                                            <td><span className={`tag ${h.tipo}`} style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '10px', color: '#fff' }}>{h.tipo}</span></td>
-                                            <td>{h.detalhe}</td>
+                                        <tr key={h.id} style={{borderBottom: '1px solid #edf2f7'}}>
+                                            <td style={{padding: '10px', fontSize: '12px'}}>{h.data}</td>
+                                            <td style={{padding: '10px'}}><span className={`tag ${h.tipo}`} style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '10px', color: '#fff', background: h.tipo.includes('VEÍCULO') ? '#f59e0b' : '#3b82f6' }}>{h.tipo}</span></td>
+                                            <td style={{padding: '10px', fontSize: '12px'}}>{h.detalhe}</td>
                                         </tr>
                                     ))}
                                 </tbody>

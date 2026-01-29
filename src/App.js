@@ -80,7 +80,7 @@ function App() {
         const conteudo = `
             <html>
                 <head>
-                    <title>Relatório de Portaria - UNIT</title>
+                    <title>Relatório de Portaria</title>
                     <style>
                         body { font-family: sans-serif; padding: 20px; }
                         h1 { text-align: center; color: #1e3a8a; }
@@ -90,7 +90,7 @@ function App() {
                     </style>
                 </head>
                 <body>
-                    <h1>SISTEMA UNIT - RELATÓRIO DE PORTARIA</h1>
+                    <h1>RELATÓRIO DE PORTARIA</h1>
                     <div style="text-align:center">Gerado em: ${new Date().toLocaleString()}</div>
                     <table>
                         <thead>
@@ -111,8 +111,7 @@ function App() {
     return (
         <div className="container">
             <div className="header">
-                <h1>SISTEMA UNIT - PORTARIA REGIONAL</h1>
-                <p>Servidor Central: 10.10.64.101</p>
+                <h1>CONTROLE PORTARIA POLO SEGURANÇA</h1>
             </div>
 
             <div className="nav-buttons">
